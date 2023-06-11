@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+message EmptyResponse {}
+message EmptyRequest {}
+message RoomRequest {
+  int64 room_id = 1;
+}
+message RoomResponse {
+  int64 room_id = 1;
+}
+message AnnounceMafiaRequest {
+  bool ready = 1;
+  int64 room_id = 2;
+}
+message NameRequest {
+  string name = 1;
+  int64 room_id = 2;
+}
+message AccuseRequest {
+  string username = 1;
+  string name = 2;
+  int64 room_id = 3;
+}
+message Role {
+  string role = 1;
+}
+message UsersInfoMessage {
+  string names = 1;
+  string statuses = 2;
+}
+message Reply {
+    string message = 1;
+}
+message BoolReply {
+  string message = 1;
+  bool right = 2;
+}
+
+service Server {
+  rpc InitName (NameRequest) returns (Reply) {}
+  rpc GetRoomId (EmptyRequest) returns (RoomResponse) {}
+  rpc GetStream (RoomRequest) returns (stream Reply) {}
+  rpc StartTheGameRequest (RoomRequest) returns (EmptyResponse) {}
+  rpc RoleAssignment (NameRequest) returns (Role) {}
+  rpc UsersInfo (NameRequest) returns (UsersInfoMessage) {}
+  rpc VoteWithChat (AccuseRequest) returns (EmptyResponse) {}
+  rpc VoteWithoutChat (AccuseRequest) returns (EmptyResponse) {}
+  rpc CheckPerson (NameRequest) returns (BoolReply) {}
+  rpc DayResult (RoomRequest) returns (Reply) {}
+  rpc NightResult (RoomRequest) returns (Reply) {}
+  rpc AnnounceMafia(AnnounceMafiaRequest) returns (EmptyRequest) {}
+  rpc CleanAccusedRequest (RoomRequest) returns (EmptyResponse) {}
+  rpc CheckGameEnding (RoomRequest) returns (BoolReply) {}
+}
